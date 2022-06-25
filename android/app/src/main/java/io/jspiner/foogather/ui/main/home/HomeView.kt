@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,9 +16,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.mvrx.compose.collectAsState
+import com.airbnb.mvrx.compose.mavericksActivityViewModel
+import com.airbnb.mvrx.compose.mavericksViewModel
 import io.jspiner.foogather.dto.CategoryDto
 import io.jspiner.foogather.ui.theme.Primary
 import io.jspiner.foogather.R
+import io.jspiner.foogather.util.format
 
 @Composable
 @Preview(showSystemUi = true)
@@ -26,12 +31,15 @@ private fun Preview() {
 }
 
 @Composable
-fun HomeView(onItemClick: () -> Unit = {}) {
+fun HomeView(
+    onItemClick: () -> Unit = {},
+    onTimeSelectorClick: () -> Unit = {}
+) {
     Column(
         modifier = Modifier.background(Color.White)
     ) {
         CategoryList()
-        TimeSelector()
+        TimeSelector(onTimeSelectorClick = onTimeSelectorClick)
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,19 +88,24 @@ private fun CategoryList() {
 }
 
 @Composable
-private fun TimeSelector() {
+private fun TimeSelector(
+    viewModel: HomeViewModel = mavericksActivityViewModel(),
+    onTimeSelectorClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-
+                onTimeSelectorClick()
             }
             .padding(vertical = 13.dp, horizontal = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(painter = painterResource(id = R.drawable.uil_calender), contentDescription = "")
+
+        val selectedDateTime by viewModel.collectAsState(HomeState::selectedDateTime)
         Text(
-            text = "2022.06.25",
+            text = selectedDateTime.format("yyyy-MM-dd"),
             fontSize = 14.sp,
             color = Color(0xFF242424),
             modifier = Modifier.padding(start = 8.dp)
@@ -105,7 +118,7 @@ private fun TimeSelector() {
                 .background(Color(0xFFD0D0D0))
         )
         Text(
-            text = "오후 3:00",
+            text = selectedDateTime.format("a h:00"),
             fontSize = 14.sp,
             color = Color(0xFF242424)
         )

@@ -29,20 +29,27 @@ private fun Preview() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun MainView(onHomeItemClick: () -> Unit = {}) {
+fun MainView(
+    onHomeItemClick: () -> Unit = {},
+    onTimeSelectorClick: () -> Unit = {}
+) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) {
-        Navigation(navController, onHomeItemClick)
+        Navigation(navController, onHomeItemClick, onTimeSelectorClick)
     }
 }
 
 @Composable
-private fun Navigation(navController: NavHostController, onHomeItemClick: () -> Unit = {}) {
+private fun Navigation(
+    navController: NavHostController,
+    onHomeItemClick: () -> Unit = {},
+    onTimeSelectorClick: () -> Unit = {}
+) {
     NavHost(navController, startDestination = NavigationItem.Home.route) {
         composable(NavigationItem.Home.route) {
-            HomeView(onHomeItemClick)
+            HomeView(onHomeItemClick, onTimeSelectorClick)
         }
         composable(NavigationItem.Reserve.route) {
             ReserveView()
