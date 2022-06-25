@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import com.airbnb.mvrx.viewModel
 import io.jspiner.foogather.base.BaseActivity
 import io.jspiner.foogather.ui.food.FoodDetailActivity
+import io.jspiner.foogather.ui.main.home.HomeState
 import io.jspiner.foogather.ui.main.home.HomeViewModel
 import io.jspiner.foogather.ui.theme.FooGatherTheme
 
@@ -34,11 +35,15 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+
+        homeViewModel.fetchCategoryList()
+
+        initObserve()
     }
 
-    private fun onHomeItemClick() {
+    private fun onHomeItemClick(foodId: Int) {
         startActivity(
-            Intent(this, FoodDetailActivity::class.java)
+            FoodDetailActivity.getIntent(this, foodId)
         )
     }
 
@@ -67,5 +72,11 @@ class MainActivity : BaseActivity() {
             1,
             false
         ).show()
+    }
+
+    private fun initObserve() {
+        homeViewModel.onEach(HomeState::selectedCategoryId, HomeState::selectedDateTime) { _, _ ->
+            homeViewModel.fetchFoodList()
+        }
     }
 }

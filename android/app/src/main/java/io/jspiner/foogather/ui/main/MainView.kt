@@ -31,7 +31,7 @@ private fun Preview() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainView(
-    onHomeItemClick: () -> Unit = {},
+    onHomeItemClick: (Int) -> Unit = {},
     onTimeSelectorClick: () -> Unit = {}
 ) {
     val navController = rememberNavController()
@@ -45,12 +45,15 @@ fun MainView(
 @Composable
 private fun Navigation(
     navController: NavHostController,
-    onHomeItemClick: () -> Unit = {},
+    onHomeItemClick: (Int) -> Unit = {},
     onTimeSelectorClick: () -> Unit = {}
 ) {
     NavHost(navController, startDestination = NavigationItem.Home.route) {
         composable(NavigationItem.Home.route) {
-            HomeView(onHomeItemClick, onTimeSelectorClick)
+            HomeView(
+                onItemClick = onHomeItemClick,
+                onTimeSelectorClick = onTimeSelectorClick
+            )
         }
         composable(NavigationItem.Reserve.route) {
             ReserveView()

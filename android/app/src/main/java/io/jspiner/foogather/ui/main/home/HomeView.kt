@@ -3,10 +3,12 @@ package io.jspiner.foogather.ui.main.home
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,12 +18,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksActivityViewModel
-import com.airbnb.mvrx.compose.mavericksViewModel
 import io.jspiner.foogather.dto.CategoryDto
-import io.jspiner.foogather.ui.theme.Primary
 import io.jspiner.foogather.R
+import io.jspiner.foogather.dto.FoodDto
 import io.jspiner.foogather.util.format
 
 @Composable
@@ -32,30 +34,48 @@ private fun Preview() {
 
 @Composable
 fun HomeView(
-    onItemClick: () -> Unit = {},
+    viewModel: HomeViewModel = mavericksActivityViewModel(),
+    onItemClick: (Int) -> Unit = {},
     onTimeSelectorClick: () -> Unit = {}
 ) {
-    Column(
-        modifier = Modifier.background(Color.White)
-    ) {
-        CategoryList()
-        TimeSelector(onTimeSelectorClick = onTimeSelectorClick)
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp)
-                .background(Color(0xFFF7F7F7))
-        )
+    val categoryList by viewModel.collectAsState(HomeState::categoryList)
 
-        FoodList(onItemClick)
+    if (categoryList is Success) {
+        Column(
+            modifier = Modifier.background(Color.White)
+        ) {
+            CategoryList(categoryList.invoke() ?: emptyList())
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Color(0xFFF7F7F7))
+            )
+            TimeSelector(onTimeSelectorClick = onTimeSelectorClick)
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .background(Color(0xFFF7F7F7))
+            )
+
+            val foodList by viewModel.collectAsState(HomeState::foodList)
+            if (foodList is Success) {
+                FoodList(foodList.invoke() ?: emptyList(), onItemClick)
+            }
+        }
+    } else {
+        Box(modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
     }
 }
 
 @Composable
-private fun CategoryList() {
-    val categoryList = List(10) {
-        CategoryDto(it, "카테고리 $it", "")
-    }
+private fun CategoryList(categoryList: List<CategoryDto>) {
+    var selectedCategoryIndex by remember { mutableStateOf(0) }
 
     LazyRow(
         modifier = Modifier
@@ -65,17 +85,23 @@ private fun CategoryList() {
         item {
             Spacer(modifier = Modifier.width(12.dp))
         }
-        items(categoryList) { item ->
+        itemsIndexed(categoryList) { index, item ->
             Column(
                 modifier = Modifier.padding(horizontal = 5.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(
+                Card(
                     modifier = Modifier
                         .height(50.dp)
                         .width(50.dp)
-                        .background(Primary)
-                )
+                        .clickable {
+                            selectedCategoryIndex = index
+                        },
+                    shape = RoundedCornerShape(4.dp),
+                    backgroundColor = Color(if (index == selectedCategoryIndex) 0xFFE35550 else 0xFFF7F7F7)
+                ) {
+                    Image(painter = painterResource(id = item.image), contentDescription = "")
+                }
                 Text(
                     text = item.name,
                     modifier = Modifier.padding(top = 4.dp),
@@ -126,45 +152,50 @@ private fun TimeSelector(
 }
 
 @Composable
-private fun FoodList(onItemClick: () -> Unit = {}) {
+private fun FoodList(foodList: List<FoodDto>, onItemClick: (Int) -> Unit = {}) {
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
-        repeat(20) {
-            FoodItem(onItemClick = onItemClick)
+        foodList.forEach { item ->
+            FoodItem(item, onItemClick = onItemClick)
         }
     }
 }
 
 @Composable
-private fun FoodItem(onItemClick: () -> Unit = {}) {
+private fun FoodItem(item: FoodDto, onItemClick: (Int) -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onItemClick()
+                onItemClick(item.id)
             }
             .padding(horizontal = 18.dp, vertical = 15.dp)
     ) {
-        Box(
+        Card(
             modifier = Modifier
                 .width(90.dp)
-                .height(90.dp)
-                .background(Color(0xFFD9D9D9))
-        )
+                .height(90.dp),
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Image(
+                painter = painterResource(id = item.foodImageList[1]),
+                contentDescription = "",
+            )
+        }
         Column(
             modifier = Modifier
                 .padding(start = 14.dp, top = 8.dp)
                 .fillMaxWidth()
         ) {
             Text(
-                text = "푸게더 돈까스",
+                text = item.name,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF242424)
             )
             Text(
-                text = "부드럽고 촉촉한 안심, 바삭한 튀김옷을 입은 맛있는 돈까스",
+                text = item.description,
                 fontSize = 12.sp,
                 color = Color(0xFF242424),
                 modifier = Modifier.padding(top = 8.dp),
@@ -176,27 +207,24 @@ private fun FoodItem(onItemClick: () -> Unit = {}) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "3/",
+                    text = "${item.reservedCount}/",
                     fontSize = 12.sp,
                     color = Color(0xFF242424),
                 )
                 Text(
-                    text = "5",
+                    text = "${item.maxCount}",
                     fontSize = 12.sp,
                     color = Color(0xFF909090),
                 )
                 Spacer(modifier = Modifier.width(6.dp))
 
-                val reservedCount = 3
-                val maxCount = 6
-
-                repeat(reservedCount) {
+                repeat(item.reservedCount) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_reserved),
                         contentDescription = ""
                     )
                 }
-                repeat(maxCount - reservedCount) {
+                repeat(item.maxCount - item.reservedCount) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_unreserved),
                         contentDescription = ""
@@ -207,3 +235,4 @@ private fun FoodItem(onItemClick: () -> Unit = {}) {
         }
     }
 }
+
