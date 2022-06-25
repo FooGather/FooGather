@@ -29,6 +29,8 @@
 
         <activity android:name=".ui.main.MainActivity" />
 
+        <activity android:name=".ui.food.FoodDetailActivity" />
+
     </application>
 
 </manifest>

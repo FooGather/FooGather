@@ -26,7 +26,7 @@ private fun Preview() {
 }
 
 @Composable
-fun HomeView() {
+fun HomeView(onItemClick: () -> Unit = {}) {
     Column(
         modifier = Modifier.background(Color.White)
     ) {
@@ -39,7 +39,7 @@ fun HomeView() {
                 .background(Color(0xFFF7F7F7))
         )
 
-        FoodList()
+        FoodList(onItemClick)
     }
 }
 
@@ -113,21 +113,24 @@ private fun TimeSelector() {
 }
 
 @Composable
-private fun FoodList() {
+private fun FoodList(onItemClick: () -> Unit = {}) {
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
         repeat(20) {
-            FoodItem()
+            FoodItem(onItemClick = onItemClick)
         }
     }
 }
 
 @Composable
-private fun FoodItem() {
+private fun FoodItem(onItemClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                onItemClick()
+            }
             .padding(horizontal = 18.dp, vertical = 15.dp)
     ) {
         Box(
