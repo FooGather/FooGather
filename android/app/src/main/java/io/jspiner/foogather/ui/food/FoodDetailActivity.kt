@@ -10,6 +10,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.airbnb.mvrx.viewModel
 import io.jspiner.foogather.base.BaseActivity
+import io.jspiner.foogather.ui.done.DoneActivity
 import io.jspiner.foogather.ui.main.home.HomeViewModel
 import io.jspiner.foogather.ui.theme.FooGatherTheme
 
@@ -26,7 +27,11 @@ class FoodDetailActivity : BaseActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    FoodDetailView()
+                    FoodDetailView {
+                        startActivity(
+                            Intent(this, DoneActivity::class.java)
+                        )
+                    }
                 }
             }
         }

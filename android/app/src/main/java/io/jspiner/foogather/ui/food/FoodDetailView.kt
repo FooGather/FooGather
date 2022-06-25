@@ -33,7 +33,7 @@ private fun Preview() {
 }
 
 @Composable
-fun FoodDetailView() {
+fun FoodDetailView(onReserveClick: () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -58,7 +58,7 @@ fun FoodDetailView() {
             }
         }
 
-        ReserveButton(modifier = Modifier.align(Alignment.BottomCenter))
+        ReserveButton(modifier = Modifier.align(Alignment.BottomCenter), onReserveClick)
     }
 }
 
@@ -237,7 +237,7 @@ private fun FoodReserveInfo(viewModel: FoodDetailViewModel = mavericksActivityVi
 }
 
 @Composable
-private fun ReserveButton(modifier: Modifier) {
+private fun ReserveButton(modifier: Modifier, onReserveClick: () -> Unit = {}) {
     Button(
         modifier = modifier
             .padding(horizontal = 20.dp)
@@ -246,7 +246,7 @@ private fun ReserveButton(modifier: Modifier) {
             .height(50.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
         shape = RoundedCornerShape(10.dp),
-        onClick = { }
+        onClick = { onReserveClick() }
     ) {
         Text(
             text = "푸게더 신청",
