@@ -32,6 +32,8 @@
 
         <activity android:name=".ui.food.FoodDetailActivity" />
 
+        <activity android:name=".ui.done.DoneActivity" />
+
     </application>
 
 </manifest>
