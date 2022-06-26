@@ -27,11 +27,16 @@ class FoodDetailActivity : BaseActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    FoodDetailView {
-                        startActivity(
-                            Intent(this, DoneActivity::class.java)
-                        )
-                    }
+                    FoodDetailView(
+                        onReserveClick = {
+                            startActivity(
+                                Intent(this, DoneActivity::class.java)
+                            )
+                        },
+                        onMenuClick = {
+
+                        }
+                    )
                 }
             }
         }

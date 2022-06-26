@@ -44,6 +44,13 @@ fun HomeView(
         Column(
             modifier = Modifier.background(Color.White)
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(vertical = 13.dp)
+                    .align(Alignment.CenterHorizontally),
+            )
             CategoryList(categoryList.invoke() ?: emptyList())
             Spacer(
                 modifier = Modifier
@@ -98,7 +105,8 @@ private fun CategoryList(categoryList: List<CategoryDto>) {
                             selectedCategoryIndex = index
                         },
                     shape = RoundedCornerShape(4.dp),
-                    backgroundColor = Color(if (index == selectedCategoryIndex) 0xFFE35550 else 0xFFF7F7F7)
+                    border = BorderStroke(if (index == selectedCategoryIndex) 1.dp else (-1).dp, Color(0xFFE35550)),
+                    backgroundColor = Color(0xFFF7F7F7)
                 ) {
                     Image(painter = painterResource(id = item.image), contentDescription = "")
                 }

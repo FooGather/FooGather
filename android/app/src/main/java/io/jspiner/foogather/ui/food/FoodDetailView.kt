@@ -33,7 +33,7 @@ private fun Preview() {
 }
 
 @Composable
-fun FoodDetailView(onReserveClick: () -> Unit = {}) {
+fun FoodDetailView(onReserveClick: () -> Unit = {}, onMenuClick: () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -44,7 +44,7 @@ fun FoodDetailView(onReserveClick: () -> Unit = {}) {
             Column(
                 modifier = Modifier.padding(horizontal = 18.dp)
             ) {
-                FoodContent()
+                FoodContent(onMenuClick = onMenuClick)
                 Spacer(
                     modifier = Modifier
                         .padding(top = 15.dp, bottom = 11.dp)
@@ -94,7 +94,10 @@ private fun TopBar(viewModel: FoodDetailViewModel = mavericksActivityViewModel()
 }
 
 @Composable
-private fun FoodContent(viewModel: FoodDetailViewModel = mavericksActivityViewModel()) {
+private fun FoodContent(
+    viewModel: FoodDetailViewModel = mavericksActivityViewModel(),
+    onMenuClick: () -> Unit = {}
+) {
     val foodAsync by viewModel.collectAsState(FoodDetailState::food)
 
     if (foodAsync is Success) {
@@ -121,7 +124,9 @@ private fun FoodContent(viewModel: FoodDetailViewModel = mavericksActivityViewMo
                     .padding(top = 8.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF7F7F7)),
                 shape = RoundedCornerShape(4.dp),
-                onClick = {}
+                onClick = {
+                    onMenuClick()
+                }
             ) {
                 Text(
                     text = "메뉴판 더보기",

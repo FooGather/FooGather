@@ -45,12 +45,19 @@ fun LoginView(onLoginClick: () -> Unit = {}) {
             shape = RoundedCornerShape(10.dp),
             onClick = { onLoginClick() }
         ) {
-            Text(
-                text = "투게더 하러가기",
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Row {
+                Image(
+                    painter = painterResource(id = R.drawable.login_logo),
+                    contentDescription = ""
+                )
+                Text(
+                    text = "하러가기",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 12.dp)
+                )
+            }
         }
     }
 }

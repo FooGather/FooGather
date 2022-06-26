@@ -64,39 +64,38 @@ class FooGatherRepository {
             ),
             FoodDto(
                 2,
-                "피자왕 파파존스",
-                "파파존스 코리아는 피자 재료의 품질과 관리 시스템 모두 철저하게 까다로운 미국 본사의 가이드라인을 따르며 탁월한 '맛의 차이'를 바탕으로 국내의 대표적인 프리미엄 피자브랜드로 그 위상을 더욱 확고히 할 것입니다.",
-                "파파존스",
+                "마루 스시",
+                "즉석에서 바로 만든 일품 수제초밥",
+                "마루 스시",
                 "서울 서초구 주홍로 3",
                 "2022.06.25 토요일\n오후 3:00",
                 5,
                 2,
-                listOf(R.drawable.food_3, R.drawable.food_4),
+                listOf(R.drawable.food_4, R.drawable.food_4),
                 R.drawable.store
             ),
             FoodDto(
                 3,
-                "처갓집 양념치킨",
-                "처갓집양념치킨의 닭고기는 가족회사인 체리부로를 통해\n" +
-                        "제공받는 단일 브랜드의 신선육만을 사용합니다",
-                "처갓집",
+                "호호식당",
+                "좋은 재료로 만든 맛있고 건강한 일본 가정식",
+                "호호식당",
                 "서울 서초구 주홍로 3",
                 "2022.06.25 토요일\n오후 3:00",
                 2,
                 1,
-                listOf(R.drawable.food_5, R.drawable.food_6),
+                listOf(R.drawable.food_6, R.drawable.food_6),
                 R.drawable.store
             ),
             FoodDto(
                 4,
-                "맘쓰터치 싸이버거",
-                "부드럽고 촉촉한 안심, 바삭한 튀김옷을 입은 돈까스입니다. 추억의 향기를 기억하는 분들은 푸게더 한입과 추억이 되살아나는 경험을 할 수 있어요!",
-                "맘스터치",
+                "상무초밥",
+                "밥이 맛있는 상무초밥",
+                "상무초밥",
                 "서울 서초구 주홍로 3",
                 "2022.06.25 토요일\n오후 3:00",
                 3,
                 0,
-                listOf(R.drawable.food_7, R.drawable.food_8),
+                listOf(R.drawable.food_8, R.drawable.food_8),
                 R.drawable.store
             )
         )
