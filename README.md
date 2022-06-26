@@ -35,6 +35,9 @@
 ### 🧾 ERD
 ![image](https://user-images.githubusercontent.com/68195241/175790945-be8c6474-12f5-411f-81ff-ffcc1ffefdc5.png)
 
+### 🎨 프로토타입
+[Protype](https://www.figma.com/proto/kjvRVVmUppGZNdGh5n2mh7/%ED%91%B8%EA%B2%8C%EB%8D%94?page-id=0%3A1&node-id=63%3A2757&viewport=290%2C379%2C0.17&scaling=scale-down&starting-point-node-id=63%3A2757)
+
 ### 🏓 팀원
 |  한지윤   |   정성민   |    전혜수    | 김경민 |
 |:------:|:-------:|:---------:|:---------:|
